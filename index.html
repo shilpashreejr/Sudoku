@@ -1,0 +1,46 @@
+<!-- <html>
+<script src='./src/js/input1.js'></script>
+<script src='./src/js/input2.js'></script> -->
+<!-- <script src='./dest/js/output.min.js'></script> -->
+<!-- <body>
+<p> testing </p>
+<button onclick="javascript:testing1()">BUTTON 1</button>
+<button onclick="javascript:testing2()">BUTTON 2</button>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Sudoku</title>
+  <style>
+table#sudokuTable input	{
+width: 2.5em; height:2.5em;
+border-width: 1px;
+border-style: solid;
+border-color: black;
+font-weight: bold;
+text-align: center
+}
+
+table#sudokuTable {
+border-width: 3px;
+border-style: solid;
+border-color: black
+}
+
+td.selected	{background-color: rgb(100%, 70%, 0%)}
+td.tofill	{color: blue}
+</style>
+</head>
+<body>
+	<div id="sudokuContainer"> </div>
+	<button id="sudokuSolver"> SOLVE THE BOARD </button>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="src/js/sudokuController.js"> </script>
+<script src="src/js/sudokuView.js"></script>
+<script src="src/js/sudokuModel.js"> </script>
+</html>
