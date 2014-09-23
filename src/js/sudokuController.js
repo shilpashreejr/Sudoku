@@ -5,9 +5,9 @@ $(document).ready(function () {
     SUDOKU_VIEW.createBoard(sudokuBoard);
 
     $('#sudokuTable').delegate("input", "change", function () {
-        var isValid = SUDOKU_MODEL.isValidNumber($(this).val()),
-            trIndex = $(this).closest("tr").index(),
-            tdIndex = $(this).closest("td").index();
+        var rowIndex = $(this).closest("tr").index(),
+            colIndex = $(this).closest("td").index(),
+            isValid = SUDOKU_MODEL.isValidNumber($(this).val(), rowIndex, colIndex);
 
         if (!isValid) {
             $(this).val('');
