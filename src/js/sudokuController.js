@@ -15,4 +15,8 @@ $(document).ready(function () {
 
     });
 
+    $('#sudokuSolver').on('click', function () {
+        SUDOKU_MODEL.solve();
+    });
+
 });
