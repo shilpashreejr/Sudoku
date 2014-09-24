@@ -14,15 +14,33 @@ SUDOKU_MODEL = (function () {
      */
     var generateBoardValues = function () {
             var boardvalues = [
-                2, 0, 0, 0, 0, 7, 0, 0, 0,
-                0, 5, 0, 0, 2, 0, 0, 1, 0,
-                0, 3, 0, 0, 8, 0, 0, 7, 0,
-                0, 0, 5, 7, 0, 0, 0, 0, 2,
-                1, 0, 0, 0, 0, 0, 0, 0, 3,
-                9, 0, 0, 0, 0, 6, 1, 0, 0,
-                0, 2, 0, 0, 7, 0, 0, 8, 0,
-                0, 8, 0, 0, 9, 0, 0, 5, 0,
-                0, 0, 0, 4, 0, 0, 0, 0, 6
+                // 2, 0, 0, 0, 0, 7, 0, 0, 0,
+                // 0, 5, 0, 0, 2, 0, 0, 1, 0,
+                // 0, 3, 0, 0, 8, 0, 0, 7, 0,
+                // 0, 0, 5, 7, 0, 0, 0, 0, 2,
+                // 1, 0, 0, 0, 0, 0, 0, 0, 3,
+                // 9, 0, 0, 0, 0, 6, 1, 0, 0,
+                // 0, 2, 0, 0, 7, 0, 0, 8, 0,
+                // 0, 8, 0, 0, 9, 0, 0, 5, 0,
+                // 0, 0, 0, 4, 0, 0, 0, 0, 6
+                // 2, 0, 0, 0, 0, 0, 0, 0, 0,
+                // 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                // 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                // 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                // 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                // 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                // 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                // 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                // 0, 0, 0, 0, 0, 0, 0, 0, 0 //5, 9, 8 - 1,4, 6
+                0, 9, 8, 0, 0, 2, 3, 0, 0,
+                0, 4, 7, 0, 3, 5, 0, 8, 0,
+                0, 0, 0, 0, 0, 7, 5, 0, 2,
+                0, 6, 5, 0, 8, 0, 0, 7, 3,
+                0, 0, 0, 5, 7, 1, 0, 9, 0,
+                4, 0, 9, 0, 0, 0, 8, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0,
+                8, 1, 0, 0, 2, 9, 4, 0, 5,
+                9, 5, 0, 3, 1, 0, 7, 2, 0
             ];
 
             _getCurrentBoard(boardvalues);
@@ -216,7 +234,7 @@ SUDOKU_MODEL = (function () {
                             put value in next_square (i.e. modify game state)
                             if (solve(game)) return SUCCESS
                             remove value from next_square (i.e. backtrack to a previous state)
-                        return FAILURE
+                    return FAILURE
             */
 
             if (_isGameComplete())
@@ -225,45 +243,60 @@ SUDOKU_MODEL = (function () {
             //find Empty square
             var emptyRow = -1,
                 emptyCol = -1;
-            // for (var i = 0; i < 9; i++) {
-            //     for (var j = 0; j < 9; j++) {
-            //         if (_currentBoardValues[i][j] == 0) {
-            //             emptyRow = i;
-            //             emptyCol = j;
-            //             break;
-            //         }
-            //     }
-            //     if (i != -1) {
-            //         break;
-            //     }
-            // }
-
-            for (var i = 0; i < 81; i++) {
-                var walkingRow = Math.floor(i / 9),
-                    walkingCol = i % 9;
-                if (_currentBoardValues[walkingRow][walkingCol] === 0) {
-                    //found = true;
-                    emptyRow = walkingRow;
-                    emptyCol = walkingCol;
+            for (var i = 0; i < 9; i++) {
+                for (var j = 0; j < 9; j++) {
+                    if (_currentBoardValues[i][j] == 0) {
+                        emptyRow = i;
+                        emptyCol = j;
+                        break;
+                    }
+                }
+                if (emptyRow != -1) {
                     break;
                 }
             }
 
+            if (emptyRow == -1) {
+                console.log("Something wrong");
+            }
+
+            // for (var i = 0; i < 81; i++) {
+            //     var walkingRow = Math.floor(i / 9),
+            //         walkingCol = i % 9;
+            //     if (_currentBoardValues[walkingRow][walkingCol] === 0) {
+            //         //found = true;
+            //         emptyRow = walkingRow;
+            //         emptyCol = walkingCol;
+            //         break;
+            //     }
+            // }
+
             //try each available number
             var availNums = _getAvailableNumbers(emptyRow, emptyCol);
+            if (availNums.length === 0) {
+                return false;
+            }
+            //1, 2, 3
             for (var i = 0; i < availNums.length; i++) {
-
                 var curVal = availNums[i];
-
-                _validateAndAddNumber(curVal, emptyRow, emptyCol);
-
-                if (solve()) {
-                    return true;
+                var isValid = _validateAndAddNumber(curVal, emptyRow, emptyCol);
+                if (!isValid) {
+                    console.log("TRY AGAIN");
                 }
 
+                console.log('_currentBoardValues-->', _currentBoardValues);
+
+                if (_solveInternal()) {
+                    return true;
+                }
                 _currentBoardValues[emptyRow][emptyCol] = 0;
+                _rowValues[emptyRow].splice(_rowValues[emptyRow].indexOf(curVal), 1);
+                _columnValues[emptyCol].splice(_columnValues[emptyCol].indexOf(curVal), 1);
+                var index = _findIndex(emptyRow, emptyCol);
+                _sectionValues[index].splice(_sectionValues[index].indexOf(curVal), 1);
 
             }
+
             return false;
         },
 
@@ -292,55 +325,72 @@ SUDOKU_MODEL = (function () {
                 }
             }
             return true;
-        }
+        },
+        /**
+         * The current board values are updated every time
+         * there is a new entry or when the board is solved.
+         *
+         * @param {Number} inputVal The user input
+         * @param {Number} rowIndex Row id
+         * @ param{Number} colIndex Col id
+         * @returns {Boolean} isValidType True/False Decision based on the checks.
+         */
+        removeExistingElements = function (firstArray, row, col, index) {
+            console.log('INITIAL  -- firstArray-->', firstArray);
+            console.log('Before ROW', _rowValues[row]);
 
-    removeExistingElements = function (firstArray, row, col, index) {
-        console.log('INITIAL  -- firstArray-->', firstArray);
-        console.log('Before ROW', _rowValues[row]);
-
-        for (var i = 0; i < _rowValues.length; i++) {
-            val = Number(_rowValues[row][i]);
-            if (val > 0) {
-                // Remove from array
-                if (firstArray.indexOf(val) > -1) {
-                    firstArray.splice(firstArray.indexOf(val), 1);
+            if (_rowValues[row] === undefined) {
+                _rowValues[row] = [];
+            }
+            for (var i = 0; i < _rowValues[row].length; i++) {
+                val = Number(_rowValues[row][i]);
+                if (val > 0) {
+                    // Remove from array
+                    if (firstArray.indexOf(val) > -1) {
+                        firstArray.splice(firstArray.indexOf(val), 1);
+                    }
                 }
             }
-        }
-        console.log('After ROW-- firstArray-->', firstArray);
+            console.log('After ROW-- firstArray-->', firstArray);
 
-        console.log('Before _columnValues--', _columnValues[col]);
-        for (var i = 0; i < _columnValues.length; i++) {
-            val = Number(_columnValues[col][i]);
-            if (val > 0) {
-                // Remove from array
-                if (firstArray.indexOf(val) > -1) {
-                    firstArray.splice(firstArray.indexOf(val), 1);
+            console.log('Before _columnValues--', _columnValues[col]);
+            if (_columnValues[col] === undefined) {
+                _columnValues[col] = [];
+            }
+            for (var i = 0; i < _columnValues[col].length; i++) {
+                val = Number(_columnValues[col][i]);
+                if (val > 0) {
+                    // Remove from array
+                    if (firstArray.indexOf(val) > -1) {
+                        firstArray.splice(firstArray.indexOf(val), 1);
+                    }
                 }
             }
-        }
-        console.log('After column-- firstArray-->', firstArray);
+            console.log('After column-- firstArray-->', firstArray);
 
-        console.log('Before section', _sectionValues[index]);
-        for (var i = 0; i < _sectionValues.length; i++) {
-            val = Number(_sectionValues[index][i]);
-            if (val > 0) {
-                // Remove from array
-                if (firstArray.indexOf(val) > -1) {
-                    firstArray.splice(firstArray.indexOf(val), 1);
+            console.log('Before section', _sectionValues[index]);
+            if (_sectionValues[index] === undefined) {
+                _sectionValues[index] = [];
+            }
+            for (var i = 0; i < _sectionValues[index].length; i++) {
+                val = Number(_sectionValues[index][i]);
+                if (val > 0) {
+                    // Remove from array
+                    if (firstArray.indexOf(val) > -1) {
+                        firstArray.splice(firstArray.indexOf(val), 1);
+                    }
                 }
             }
-        }
 
-        console.log('After Section-- firstArray-->', firstArray);
-        // for (var i = 0; i < firstArray.length; i++) {
-        //     if ($.inArray(firstArray[i], secondArray) !== -1) {
-        //         firstArray.splice(firstArray.indexOf[i], 1);
-        //     }
-        // }
+            console.log('After Section-- firstArray-->', firstArray);
+            // for (var i = 0; i < firstArray.length; i++) {
+            //     if ($.inArray(firstArray[i], secondArray) !== -1) {
+            //         firstArray.splice(firstArray.indexOf[i], 1);
+            //     }
+            // }
 
-        return firstArray;
-    };
+            return firstArray;
+        };
 
     return {
         generateBoardValues: generateBoardValues,
