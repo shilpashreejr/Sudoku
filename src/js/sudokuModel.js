@@ -6,6 +6,12 @@ SUDOKU_MODEL = (function () {
         _columnValues = [],
         _rowValues = [];
 
+    /**
+     * Generates the board values and also updates the
+     * row , column and section values.
+     *
+     * @returns {Array} boardValues A single dimensional array
+     */
     var generateBoardValues = function () {
             var boardvalues = [
                 2, 0, 0, 0, 0, 7, 0, 0, 0,
@@ -25,7 +31,15 @@ SUDOKU_MODEL = (function () {
             return boardvalues;
         },
 
-        findIndex = function (row, column) {
+        /**
+         * There are 9 sections in a board,
+         * this function finds the section index
+         *
+         * @param {Number} row Row id
+         * @param {Number} col Column id
+         * @returns {Number} An index of the section
+         */
+        _findIndex = function (row, column) {
             var sectRow = Math.floor(row / 3),
                 sectCol = Math.floor(column / 3);
 
@@ -49,6 +63,13 @@ SUDOKU_MODEL = (function () {
                 return 8;
         },
 
+        /**
+         * Validates the user's inputs for the type and the range.
+         * The range allowed is only from 1 to 9 and type is number.
+         *
+         * @param {Number} inputVal The user's input
+         * @returns {Boolean} isValidType True/False Decision based on the checks.
+         */
         _isValidTypeRange = function (inputVal) {
             var isType = $.isNumeric(inputVal);
             if ((inputVal > 0 && inputVal <= 9) && isType) {
@@ -57,6 +78,12 @@ SUDOKU_MODEL = (function () {
             }
         },
 
+        /**
+         * The current board values is being obtained here.
+         *
+         * @param {Number} boardvalues The single dimension array
+         * @returns {Array} _currentBoardValues Current board values
+         */
         _getCurrentBoard = function (boardvalues) {
             for (var i = 0, row = 0, col = 0; i < 81; i++) {
                 if (col === 0) {
@@ -74,6 +101,13 @@ SUDOKU_MODEL = (function () {
             return _currentBoardValues;
         },
 
+        /**
+         * The current board values are updated every time
+         * there is a new entry or when the board is solved.
+         *
+         * @param {Array} _currentBoardValues Current board values
+         * @returns {Array} _currentBoardValues Updated Current board values
+         */
         _updateBoardValues = function (_currentBoardValues) {
 
             for (var i = 0; i < 9; i++) {
@@ -94,7 +128,7 @@ SUDOKU_MODEL = (function () {
                     _columnValues[j][_columnValues[j].length] = _currentBoardValues[i][j];
 
                     /* section values */
-                    index = findIndex(i, j);
+                    index = _findIndex(i, j);
                     if (_sectionValues[index] == undefined) {
                         _sectionValues[index] = [];
                     }
@@ -105,8 +139,18 @@ SUDOKU_MODEL = (function () {
             return _currentBoardValues;
         },
 
+        /**
+         * Validates(If the user input doesnt exist either row, column, or section.)
+         * and adds the values to the _currentBoardValues,
+         * _rowValues, _columnvalues, _sectionValues
+         *
+         * @param {Number} inputVal The user input
+         * @param {Number} rowIndex Row id
+         * @ param{Number} colIndex Col id
+         * @returns {Boolean} isValid If the values gets added, then returns True, if not False.
+         */
         _validateAndAddNumber = function (inputVal, rowIndex, colIndex) {
-            var index = findIndex(rowIndex, colIndex);
+            var index = _findIndex(rowIndex, colIndex);
 
             if (
                 (_rowValues[rowIndex].indexOf(inputVal) === -1) &&
@@ -126,6 +170,16 @@ SUDOKU_MODEL = (function () {
             return isValid;
         },
 
+        /**
+         * Validates the user's inputs for the type and the range.
+         * The range allowed is only from 1 to 9 and type is number.
+         * Also updates the current, row, column and section values
+         *
+         * @param {Number} inputVal The user input
+         * @param {Number} rowIndex Row id
+         * @ param{Number} colIndex Col id
+         * @returns {Boolean} isValidType True/False Decision based on the checks.
+         */
         isValidNumber = function (inputVal, rowIndex, colIndex) {
 
             var isValidType = _isValidTypeRange(inputVal);
@@ -137,6 +191,9 @@ SUDOKU_MODEL = (function () {
             return isValidType;
         },
 
+        /**
+         * Solves the Game
+         */
         solve = function () {
 
             if (_solveInternal()) {
@@ -145,6 +202,9 @@ SUDOKU_MODEL = (function () {
 
         },
 
+        /**
+         * Solves the Game
+         */
         _solveInternal = function () {
             /*
             solve(game):
@@ -207,9 +267,16 @@ SUDOKU_MODEL = (function () {
             return false;
         },
 
+        /**
+         * Gets the numbers available for a for a particular index.
+         *
+         * @param {Number} rowIndex Row id
+         * @param {Number} colIndex Col id
+         * @returns {Array} availableNums Single dimensional array
+         */
         _getAvailableNumbers = function (row, col) {
             var availableNums = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-            var index = findIndex(row, col);
+            var index = _findIndex(row, col);
             availableNums = removeExistingElements(availableNums, row, col, index);
 
             return availableNums;
