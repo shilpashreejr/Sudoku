@@ -14,37 +14,19 @@ SUDOKU_MODEL = (function () {
      */
     var generateBoardValues = function () {
             var boardvalues = [
-                // 2, 0, 0, 0, 0, 7, 0, 0, 0,
-                // 0, 5, 0, 0, 2, 0, 0, 1, 0,
-                // 0, 3, 0, 0, 8, 0, 0, 7, 0,
-                // 0, 0, 5, 7, 0, 0, 0, 0, 2,
-                // 1, 0, 0, 0, 0, 0, 0, 0, 3,
-                // 9, 0, 0, 0, 0, 6, 1, 0, 0,
-                // 0, 2, 0, 0, 7, 0, 0, 8, 0,
-                // 0, 8, 0, 0, 9, 0, 0, 5, 0,
-                // 0, 0, 0, 4, 0, 0, 0, 0, 6
-                // 2, 0, 0, 0, 0, 0, 0, 0, 0,
-                // 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                // 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                // 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                // 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                // 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                // 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                // 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                // 0, 0, 0, 0, 0, 0, 0, 0, 0 //5, 9, 8 - 1,4, 6
-                0, 9, 8, 0, 0, 2, 3, 0, 0,
-                0, 4, 7, 0, 3, 5, 0, 8, 0,
-                0, 0, 0, 0, 0, 7, 5, 0, 2,
-                0, 6, 5, 0, 8, 0, 0, 7, 3,
-                0, 0, 0, 5, 7, 1, 0, 9, 0,
-                4, 0, 9, 0, 0, 0, 8, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0, 0,
-                8, 1, 0, 0, 2, 9, 4, 0, 5,
-                9, 5, 0, 3, 1, 0, 7, 2, 0
-            ];
+                    0, 9, 8, 0, 0, 2, 3, 0, 0,
+                    0, 4, 7, 0, 3, 5, 0, 8, 0,
+                    0, 0, 0, 0, 0, 7, 5, 0, 2,
+                    0, 6, 5, 0, 8, 0, 0, 7, 3,
+                    0, 0, 0, 5, 7, 1, 0, 9, 0,
+                    4, 0, 9, 0, 0, 0, 8, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    8, 1, 0, 0, 2, 9, 4, 0, 5,
+                    9, 5, 0, 3, 1, 0, 7, 2, 0
+                ];
 
             _getCurrentBoard(boardvalues);
-            _originalBoardValues = _currentBoardValues;
+            _originalBoardValues = $.extend(true, {}, _currentBoardValues);
 
             return boardvalues;
         },
@@ -199,43 +181,41 @@ SUDOKU_MODEL = (function () {
          * @returns {Boolean} isValidType True/False Decision based on the checks.
          */
         isValidNumber = function (inputVal, rowIndex, colIndex) {
-
-            var isValidType = _isValidTypeRange(inputVal);
-
-            if (isValidType) {
-                _validateAndAddNumber(parseInt(inputVal), rowIndex, colIndex);
-            }
-
-            return isValidType;
+            return _isValidTypeRange(inputVal);
         },
 
+        isValueAdded = function (inputVal, rowIndex, colIndex) {
+            return _validateAndAddNumber(parseInt(inputVal), rowIndex, colIndex);
+        },
         /**
          * Solves the Game
          */
         solve = function () {
 
             if (_solveInternal()) {
-                _currentBoardValues;
+                return _currentBoardValues;
+            } else {
+                return false;
             }
 
         },
 
         /**
          * Solves the Game
+         * PSUEDO CODE FOR THE SOLVER
+         *  solve(game):
+         *     if (game board is full)
+         *        return SUCCESS
+         *   else
+         *      next_square = getNextEmptySquare()
+         *         for each value that can legally be put in next_square
+         *            put value in next_square (i.e. modify game state)
+         *           if (solve(game)) return SUCCESS
+         *          remove value from next_square (i.e. backtrack to a previous state)
+         * return FAILURE
+         *
          */
         _solveInternal = function () {
-            /*
-            solve(game):
-                if (game board is full)
-                    return SUCCESS
-                else
-                    next_square = getNextEmptySquare()
-                        for each value that can legally be put in next_square
-                            put value in next_square (i.e. modify game state)
-                            if (solve(game)) return SUCCESS
-                            remove value from next_square (i.e. backtrack to a previous state)
-                    return FAILURE
-            */
 
             if (_isGameComplete())
                 return true;
@@ -260,23 +240,21 @@ SUDOKU_MODEL = (function () {
                 console.log("Something wrong");
             }
 
-            // for (var i = 0; i < 81; i++) {
-            //     var walkingRow = Math.floor(i / 9),
-            //         walkingCol = i % 9;
-            //     if (_currentBoardValues[walkingRow][walkingCol] === 0) {
-            //         //found = true;
-            //         emptyRow = walkingRow;
-            //         emptyCol = walkingCol;
-            //         break;
-            //     }
-            // }
-
             //try each available number
             var availNums = _getAvailableNumbers(emptyRow, emptyCol);
             if (availNums.length === 0) {
                 return false;
             }
-            //1, 2, 3
+            //Randomize availNums
+            var randomAvailNums = [];
+            var availNumLen = availNums.length;
+            for (var i = 0; i < availNumLen; i++) {
+                var val = availNums[Math.floor(Math.random() * availNums.length)];
+                randomAvailNums[i] = val;
+                availNums.splice(availNums.indexOf(val), 1);
+            }
+            availNums = randomAvailNums;
+
             for (var i = 0; i < availNums.length; i++) {
                 var curVal = availNums[i];
                 var isValid = _validateAndAddNumber(curVal, emptyRow, emptyCol);
@@ -289,6 +267,7 @@ SUDOKU_MODEL = (function () {
                 if (_solveInternal()) {
                     return true;
                 }
+
                 _currentBoardValues[emptyRow][emptyCol] = 0;
                 _rowValues[emptyRow].splice(_rowValues[emptyRow].indexOf(curVal), 1);
                 _columnValues[emptyCol].splice(_columnValues[emptyCol].indexOf(curVal), 1);
@@ -336,8 +315,6 @@ SUDOKU_MODEL = (function () {
          * @returns {Boolean} isValidType True/False Decision based on the checks.
          */
         removeExistingElements = function (firstArray, row, col, index) {
-            console.log('INITIAL  -- firstArray-->', firstArray);
-            console.log('Before ROW', _rowValues[row]);
 
             if (_rowValues[row] === undefined) {
                 _rowValues[row] = [];
@@ -351,9 +328,7 @@ SUDOKU_MODEL = (function () {
                     }
                 }
             }
-            console.log('After ROW-- firstArray-->', firstArray);
 
-            console.log('Before _columnValues--', _columnValues[col]);
             if (_columnValues[col] === undefined) {
                 _columnValues[col] = [];
             }
@@ -366,9 +341,7 @@ SUDOKU_MODEL = (function () {
                     }
                 }
             }
-            console.log('After column-- firstArray-->', firstArray);
 
-            console.log('Before section', _sectionValues[index]);
             if (_sectionValues[index] === undefined) {
                 _sectionValues[index] = [];
             }
@@ -382,19 +355,19 @@ SUDOKU_MODEL = (function () {
                 }
             }
 
-            console.log('After Section-- firstArray-->', firstArray);
-            // for (var i = 0; i < firstArray.length; i++) {
-            //     if ($.inArray(firstArray[i], secondArray) !== -1) {
-            //         firstArray.splice(firstArray.indexOf[i], 1);
-            //     }
-            // }
-
             return firstArray;
+        },
+        resetBoardValues = function () {
+            _currentBoardValues = _originalBoardValues;
+            _updateBoardValues(_originalBoardValues);
+            return _originalBoardValues;
         };
 
     return {
         generateBoardValues: generateBoardValues,
         isValidNumber: isValidNumber,
-        solve: solve
+        solve: solve,
+        isValueAdded: isValueAdded,
+        resetBoardValues: resetBoardValues
     };
 })();

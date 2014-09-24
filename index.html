@@ -1,33 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>Sudoku</title>
-  <style>
-table#sudokuTable input	{
-width: 2.5em; height:2.5em;
-border-width: 1px;
-border-style: solid;
-border-color: black;
-font-weight: bold;
-text-align: center
-}
-
-table#sudokuTable {
-border-width: 3px;
-border-style: solid;
-border-color: black
-}
-
-td.selected	{background-color: rgb(100%, 70%, 0%)}
-td.tofill	{color: blue}
-</style>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Sudoku</title>
 </head>
 <body>
+	<h1> SUDOKU </h1>
 	<div id="sudokuContainer"> </div>
-	<button id="sudokuSolver"> SOLVE THE BOARD </button>
+	<div id='buttonGrp'> 
+		<button id='sudokuSolver'>SOLVE THE BOARD</button> 
+		<button id='resetSudoku'>RESET THE BOARD</button> 
+	</div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="src/css/sudoku.css">
 <script src="src/js/sudokuController.js"> </script>
 <script src="src/js/sudokuView.js"></script>
 <script src="src/js/sudokuModel.js"> </script>

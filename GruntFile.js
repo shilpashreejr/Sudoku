@@ -13,30 +13,30 @@ module.exports = function (grunt) {
         options: {
           // Target-specific options go here.
         },
-        src: 'src/css/file.css',
-        dest: 'dest/css/file.css'
+        src: 'src/css/sudoku.css',
+        dest: 'dest/css/sudoku.css'
       },
 
       diff: {
         options: {
           diff: true
         },
-        src: 'src/css/file.css',
-        dest: 'dest/css/file.css' // -> dest/css/file.css, dest/css/file.css.patch
+        src: 'src/css/sudoku.css',
+        dest: 'dest/css/sudoku.css'
       },
 
       sourcemap: {
         options: {
           map: true
         },
-        src: 'src/css/file.css',
-        dest: 'dest/css/file.css' // -> dest/css/file.css, dest/css/file.css.map
+        src: 'src/css/sudoku.css',
+        dest: 'dest/css/sudoku.css'
       },
     },
     uglify: {
       my_target: {
         files: {
-          'dest/js/output.min.js': ['src/js/input1.js', 'src/js/input2.js']
+          'dest/js/sudoku.min.js': ['src/js/sudokuView.js', 'src/js/sudokuController.js', 'src/js/sudokuModel.js']
         }
       }
     }
