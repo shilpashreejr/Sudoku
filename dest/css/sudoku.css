@@ -41,7 +41,6 @@ td input {
 }
 
 button {
-	left: 500px;
 	background:#e74c3c;
 }
 
@@ -63,6 +62,10 @@ and (max-device-width : 480px) {
 	table { 
 		width: 95%;
 	}
+	td input {
+		width:75%;
+		font-size: 100%;
+	}
 
 
 }
@@ -75,6 +78,10 @@ and (min-width : 321px) {
 
 	table { 
 		width: 95%;
+	}
+	td input {
+		width:75%;
+		font-size: 100%;
 	}
 
 }
@@ -89,6 +96,11 @@ and (max-width : 320px) {
 		width: 95%;
 	}
 
+	td input {
+		width:75%;
+		font-size: 100%;
+	}
+
 }
 
 /* iPads (portrait and landscape) ----------- */
@@ -101,6 +113,11 @@ and (max-device-width : 1024px) {
 
 	table { 
 		width: 45%;
+	}
+
+	td input {
+		width:75%;
+		font-size: 100%;
 	}
 
 }
