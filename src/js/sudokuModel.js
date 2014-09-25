@@ -4,7 +4,11 @@ SUDOKU_MODEL = (function () {
         _originalBoardValues = [],
         _sectionValues = [],
         _columnValues = [],
-        _rowValues = [];
+        _rowValues = [],
+        NUM_OF_COLS = 9,
+        NUM_OF_ROWS = 9,
+        MIN_VAL = 0,
+        MAX_VAL = 9;
 
     /**
      * Generates the board values and also updates the
@@ -72,7 +76,7 @@ SUDOKU_MODEL = (function () {
          */
         _isValidTypeRange = function (inputVal) {
             var isType = $.isNumeric(inputVal);
-            if ((inputVal > 0 && inputVal <= 9) && isType) {
+            if ((inputVal > MIN_VAL && inputVal <= MAX_VAL) && isType) {
                 isValidType = true;
                 return isValidType;
             }
@@ -91,11 +95,16 @@ SUDOKU_MODEL = (function () {
                 }
                 _currentBoardValues[row][col] = boardvalues[i];
                 col++;
-                if (col === 9) {
+                if (col === NUM_OF_COLS) {
                     row = row + 1;
                     col = 0;
                 }
             }
+            //Empty the values in all arrays
+            _sectionValues = [];
+            _columnValues = [];
+            _rowValues = [];
+
             _updateBoardValues(_currentBoardValues);
 
             return _currentBoardValues;
@@ -110,8 +119,8 @@ SUDOKU_MODEL = (function () {
          */
         _updateBoardValues = function (_currentBoardValues) {
 
-            for (var i = 0; i < 9; i++) {
-                for (var j = 0; j < 9; j++) {
+            for (var i = 0; i < NUM_OF_ROWS; i++) {
+                for (var j = 0; j < NUM_OF_COLS; j++) {
                     if (_currentBoardValues[i][j] === 0)
                         continue;
 
@@ -133,6 +142,18 @@ SUDOKU_MODEL = (function () {
                         _sectionValues[index] = [];
                     }
                     _sectionValues[index][_sectionValues[index].length] = _currentBoardValues[i][j];
+                }
+            }
+
+            for (var i = 0; i < MAX_VAL; i++) {
+                if (_rowValues[i] === undefined) {
+                    _rowValues[i] = [];
+                }
+                if (_columnValues[i] === undefined) {
+                    _columnValues[i] = [];
+                }
+                if (_sectionValues[i] === undefined) {
+                    _sectionValues[i] = [];
                 }
             }
 
@@ -223,8 +244,8 @@ SUDOKU_MODEL = (function () {
             //find Empty square
             var emptyRow = -1,
                 emptyCol = -1;
-            for (var i = 0; i < 9; i++) {
-                for (var j = 0; j < 9; j++) {
+            for (var i = 0; i < NUM_OF_ROWS; i++) {
+                for (var j = 0; j < NUM_OF_COLS; j++) {
                     if (_currentBoardValues[i][j] == 0) {
                         emptyRow = i;
                         emptyCol = j;
@@ -295,8 +316,8 @@ SUDOKU_MODEL = (function () {
         },
 
         _isGameComplete = function () {
-            for (var i = 0; i < 9; i++) {
-                for (var j = 0; j < 9; j++) {
+            for (var i = 0; i < NUM_OF_ROWS; i++) {
+                for (var j = 0; j < NUM_OF_COLS; j++) {
                     if (_currentBoardValues[i][j] == 0) {
                         return false;
 
@@ -357,10 +378,37 @@ SUDOKU_MODEL = (function () {
 
             return firstArray;
         },
+
+        /**
+         * The current board values are updated every time
+         * there is a change in the user input or it is removed.
+         *
+         * @param {Number} rowIndex Row id
+         * @ param{Number} colIndex Col id
+         * @returns {Boolean} isValidType True/False Decision based on the checks.
+         */
+        removeValue = function (rowIndex, colIndex) {
+            var index = _findIndex(rowIndex, colIndex);
+            var existingValue = _currentBoardValues[rowIndex][colIndex];
+
+            if (existingValue == 0) {
+                return false;
+            }
+            _currentBoardValues[rowIndex][colIndex] = 0;
+            _rowValues[rowIndex].splice(_rowValues[rowIndex].indexOf(existingValue), 1);
+            _columnValues[colIndex].splice(_columnValues[colIndex].indexOf(existingValue), 1);
+            _sectionValues[index].splice(_sectionValues[index].indexOf(existingValue), 1);
+            return true;
+        },
+
+        /**
+         * The board values are reset to the original board values.
+         *
+         * @returns {Array} _currentBoardValues current board values
+         */
         resetBoardValues = function () {
-            _currentBoardValues = _originalBoardValues;
-            _updateBoardValues(_originalBoardValues);
-            return _originalBoardValues;
+            generateBoardValues();
+            return _currentBoardValues;
         };
 
     return {
@@ -368,6 +416,7 @@ SUDOKU_MODEL = (function () {
         isValidNumber: isValidNumber,
         solve: solve,
         isValueAdded: isValueAdded,
-        resetBoardValues: resetBoardValues
+        resetBoardValues: resetBoardValues,
+        removeValue: removeValue
     };
 })();

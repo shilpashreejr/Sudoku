@@ -1,14 +1,29 @@
 $(document).ready(function () {
-
-    var sudokuBoard = SUDOKU_MODEL.generateBoardValues();
+    /* This is the main entry point. This communicates between the 
+     * SUDOKU_MODEL and SUDOKU_VIEW.
+     *
+     * A call for generating a board values, creating a table,
+     * and also manages the board.
+     */
+    var sudokuBoard = SUDOKU_MODEL.generateBoardValues(),
+        rowIndex,
+        colIndex,
+        isValueAdded,
+        isValid,
+        solvedBoard,
+        resetBoardValues;
 
     SUDOKU_VIEW.createBoard(sudokuBoard);
 
     $('#sudokuTable').delegate("input", "keyup", function () {
-        var rowIndex = $(this).closest("tr").index(),
-            colIndex = $(this).closest("td").index(),
-            isValid = SUDOKU_MODEL.isValidNumber($(this).val(), rowIndex, colIndex),
-            isValueAdded;
+        rowIndex = $(this).closest("tr").index();
+        colIndex = $(this).closest("td").index();
+        isValid = SUDOKU_MODEL.isValidNumber($(this).val(), rowIndex, colIndex);
+
+        if ($(this).val() === '') {
+            SUDOKU_VIEW.removeErrorState($(this));
+            SUDOKU_MODEL.removeValue(rowIndex, colIndex);
+        }
 
         if (!isValid) {
             $(this).val('');
@@ -24,17 +39,19 @@ $(document).ready(function () {
 
     });
 
-    $('#buttonGrp').delegate('button', 'click', function () {
+    $('.buttonGrp').delegate('button', 'click', function () {
         if ($(this).text() === 'SOLVE THE BOARD') {
             $('#sudokuTable input').removeClass('errorState');
-            var solvedBoard = SUDOKU_MODEL.solve();
+            solvedBoard = SUDOKU_MODEL.solve();
             if (solvedBoard != false) {
                 SUDOKU_VIEW.solvedBoard('#sudokuTable input', solvedBoard);
+            } else {
+                SUDOKU_VIEW.showErrorMsg();
             }
         } else if ($(this).text() === 'RESET THE BOARD') {
             $('#sudokuTable input').val('');
             $('#sudokuTable input').removeClass('errorState');
-            var resetBoardValues = SUDOKU_MODEL.resetBoardValues();
+            resetBoardValues = SUDOKU_MODEL.resetBoardValues();
             SUDOKU_VIEW.solvedBoard('#sudokuTable input', resetBoardValues);
         }
 

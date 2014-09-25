@@ -1,18 +1,16 @@
 body {
 	background:#f1c40f;
 }
-
 h1 {
 	text-align: center;
 }
-
 table {
 	margin-left: auto;
 	margin-right: auto;
 	background:#edeff1;
 	border:3px solid #000;
+	width: 33.3%;
 }
-
 td {
 	border-right:1px solid #000;
 	border-bottom: 1px solid #000;
@@ -25,9 +23,9 @@ td:nth-child(3n) {
 tr:nth-child(3n) td {
 	border-bottom-width:5px;
 }
-table {
+/*table {
 	width: 45%;
-}
+}*/
 tr {
 	width: 33.3%;
 }
@@ -40,8 +38,9 @@ td input {
 	text-align: center;
 }
 
-button {
-	background:#e74c3c;
+.buttonGrp {
+	margin: 50px;
+	text-align: center;
 }
 
 .errorState {
@@ -52,129 +51,144 @@ button {
 	background: yellow;
 }
 
+.sudokuButton {
+   border-top: 1px solid #96d1f8;
+   background: #d6cd65;
+   background: -webkit-gradient(linear, left top, left bottom, from(#699c3e), to(#d6cd65));
+   background: -webkit-linear-gradient(top, #699c3e, #d6cd65);
+   padding: 10px 20px;
+   border-radius: 23px;
+   box-shadow: rgba(0,0,0,1) 0 1px 0;
+   text-shadow: rgba(0,0,0,.4) 0 1px 0;
+   color: #0f0e0f;
+   font-size: 22px;
+   font-family: Georgia, serif;
+   text-decoration: none;
+   vertical-align: middle;
+   margin: 15px;
+   }
+.sudokuButton:hover {
+   border-top-color: #297828;
+   background: #297828;
+   color: #ccc;
+   }
+.sudokuButton:active {
+   border-top-color: #1b435e;
+   background: #1b435e;
+   }
+
 /* Smartphones (portrait and landscape) ----------- */
 
-@media only screen
-
-and (min-device-width : 320px)
-
-and (max-device-width : 480px) {
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
 	table { 
 		width: 95%;
 	}
 	td input {
 		width:75%;
-		font-size: 100%;
+		font-size: 75%;
 	}
 
-
-}
-
-/* Smartphones (landscape) ----------- */
-
-@media only screen
-
-and (min-width : 321px) {
-
-	table { 
-		width: 95%;
-	}
-	td input {
-		width:75%;
-		font-size: 100%;
-	}
 
 }
 
 /* Smartphones (portrait) ----------- */
 
-@media only screen
-
-and (max-width : 320px) {
+@media only screen and (max-width : 320px) {
 
 	table { 
 		width: 95%;
 	}
-
+	tr {
+		width: 25%;
+	}
 	td input {
-		width:75%;
-		font-size: 100%;
+		width:50%;
+		font-size: 50%;
 	}
 
 }
 
 /* iPads (portrait and landscape) ----------- */
 
-@media only screen
-
-and (min-device-width : 768px)
-
-and (max-device-width : 1024px) {
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) {
 
 	table { 
 		width: 45%;
 	}
-
+	tr {
+		width: 33.3%;
+	}
 	td input {
 		width:75%;
-		font-size: 100%;
+		font-size: 75%;
 	}
 
 }
 
 /* iPads (landscape) ----------- */
 
-@media only screen
-
-and (min-device-width : 768px)
-
-and (max-device-width : 1024px)
-
-and (orientation : landscape) {
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape) {
 
 	table { 
 		width: 45%;
+	}
+
+	td input {
+		width:50%;
+		font-size: 50%;
 	}
 
 }
 
 /* iPads (portrait) ----------- */
 
-@media only screen
-
-and (min-device-width : 768px)
-
-and (max-device-width : 1024px)
-
-and (orientation : portrait) {
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : portrait) {
 
 	table { 
 		width: 45%;
+	}
+	td input {
+		width:89%;
+		font-size: 150%;
 	}
 
 }
 
 /* Desktops and laptops ----------- */
 
-@media only screen
-
-and (min-width : 1224px) {
+@media only screen and (min-width : 1224px) {
 
 	table { 
 		width: 45%;
+	}
+	td input {
+		width:89%;
+		font-size: 150%;
 	}
 
 }
 
 /* Large screens ----------- */
 
-@media only screen
-
-and (min-width : 1824px) {
+@media only screen and (min-width : 1824px) {
 
 	table { 
 		width: 45%;
 	}
+	td input {
+		width:89%;
+		font-size: 150%;
+	}
 
 }
+
+
+
+
+/*@media only screen and (max-width: 768px) {
+  table 
+}
+@media only screen and (max-width: 480px) {
+  
+}*/
 /*# sourceMappingURL=sudoku.css.map */
