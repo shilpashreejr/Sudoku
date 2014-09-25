@@ -18,6 +18,4 @@ Also would like to add the difficulty level
 Also would like to add the assist mode where the user can see the legal numbers for each cell.
 
 
-Link: http://iq.jyothepro.com/Sudoku/
-
-      http://f960a5d.5minfork.com/
+Link1: http://iq.jyothepro.com/Sudoku/
